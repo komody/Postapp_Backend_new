@@ -12,6 +12,8 @@ tags:
   - name: attachment
 servers:
   - url: 'http://localhost:1113'
+  - url: 'http://localhost:80'
+
 paths:
   /session/register:
     post:
