@@ -1,0 +1,466 @@
+openapi: 3.0.3
+info:
+  title: つぶやき投稿アプリAPI
+  description: |-
+    つぶやき投稿アプリのAPI定義書です。
+  version: 1.0.11
+tags:
+  - name: session
+  - name: user
+  - name: post
+  - name: notification
+  - name: attachment
+servers:
+  - url: 'http://localhost:1113'
+paths:
+  /session/register:
+    post:
+      tags:
+        - session
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+  /session:
+    post:
+      tags:
+        - session
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+    delete:
+      tags:
+        - session
+      responses:
+        '200':
+          description: successful operation
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /user/{userId}:
+    get:
+      tags:
+        - user
+      summary: Get user by user id
+      description: ''
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    put:
+      tags:
+        - user
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: User not found
+  /user/{userId}/follower:
+    get:
+      tags:
+        - user
+      operationId: getFollowerList
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /user/{userId}/followee:
+    get:
+      tags:
+        - user
+      operationId: getFolloweeList
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /post:
+    post:
+      tags:
+        - post
+      summary: Create post
+      operationId: createPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/PostRequest'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+  /post/{postId}:
+    get:
+      tags:
+        - post
+      summary: Get post by post id
+      description: ''
+      operationId: getPostById
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Post not found
+    put:
+      tags:
+        - post
+      summary: Update post
+      description: ''
+      operationId: updatePost
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update an existent post in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Post not found
+  /post/{postId}/like_count:
+    get:
+      tags:
+        - post
+      operationId: getLikeCount
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+  /user/{userId}/notifications:
+    get:
+      tags:
+        - notification
+      summary: Get user notifications
+      description: Get a list of notifications for a specific user.
+      operationId: getUserNotifications
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '404':
+          description: User not found or no notifications available
+    put:
+      tags:
+        - notification
+      summary: Update notification status
+      description: Update the status of a notification (mark as read).
+      operationId: updateNotificationStatus
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: notificationId
+          in: query
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update an existent notification in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '404':
+          description: User or notification not found
+  /attachment:
+    post:
+      tags:
+        - attachment
+      summary: Create Attachment
+      operationId: Create Attachment
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                url:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    Session:
+      type: object
+      properties:
+        jwtToken:
+          type: string
+    UserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: theUser
+        introduction:
+          type: string
+        iconAttachmentId:
+          type: integer
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: theUser
+        introduction:
+          type: string
+        iconAttachmentId:
+          type: integer
+        deletedAt:
+          type: string
+          example: '2018–10–26T21:32:52'
+    PostRequest:
+      type: object
+      properties:
+        content:
+          type: string
+        attachmentId:
+          type: integer
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 2
+        parent_id:
+          type: integer
+          format: int64
+          example: 1
+        content:
+          type: string
+          example: こんにちは
+        like_count: 
+          type: integer
+        user_id:
+          type: integer
+          format: int64
+          example: 10
+        attachment_id:
+          type: integer
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: '通知の一意な識別子'
+        type:
+          type: integer
+          description: '通知の種類を表す数値（返信: 1, いいね: 2, フォロー: 3）'
+          example: 1
+        notifiedById:
+          type: integer
+          description: '通知を生成したユーザーの識別子'
+        notifiedByName:
+          type: string
+          description: '通知を生成したユーザーの名前'
+          example: 'つぶやき太郎'
+        alreadyRead:
+          type: boolean
+          description: '通知が既読かどうかを示すフラグ(true: 既読, false: 未読)'
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          description: '通知が生成された日時'
+          example: '2018–10–26T21:32:52'
+    NotificationRequest:
+      type: object
+      properties:
+        alreadyRead:
+          type: boolean
+          description: '通知が既読かどうかを示すフラグ(true: 既読, false: 未読)'
+          example: false
+    Attachment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        type:
+          type: string
+        url:
+          type: string
+        preview_url:
+          type: string
+        description:
+          type: string

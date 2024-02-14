@@ -9,8 +9,7 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - "5174:5173"
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -30,7 +29,7 @@ services:
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
+            - "3307:3306"
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ROOT_HOST: '%'
@@ -100,6 +99,30 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
+    swagger-editor:
+      image: swaggerapi/swagger-editor
+      container_name: "post-swagger-editor"
+      ports:
+        - "1111:8080"
+
+    swagger-ui:
+      image: swaggerapi/swagger-ui
+      container_name: "post-swagger-ui"
+      ports:
+        - "1112:8080"
+      volumes:
+        - ./openapi:/openapi
+      environment:
+        SWAGGER_JSON: /openapi/openapi.yaml
+
+    swagger-api:
+      image: stoplight/prism:3
+      container_name: "post-swagger-api"
+      ports:
+        - "1113:4010"
+      command: mock -h 0.0.0.0 /openapi/openapi.yaml
+      volumes:
+        - ./openapi:/openapi
 networks:
     sail:
         driver: bridge
