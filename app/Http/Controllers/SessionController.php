@@ -4,31 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\DestroyRequest;
-use App\UseCases\Session\CreateAction;
-use App\UseCases\Session\DestroyAction;
-use App\Http\Requests\Session\CreateRequest;
+use App\Http\Requests\Session\RegisterRequest;
+use App\Http\Requests\Session\LoginRequest;
+use App\Http\Requests\Session\LogoutRequest;
+use App\UseCases\Session\RegisterAction;
+use App\UseCases\Session\LoginAction;
+use App\UseCases\Session\LogoutAction;
 use Illuminate\Validation\ValidationException;
 
 class SessionController extends Controller
 {
-    protected $createAction;
-    protected $destroyAction;
-
-    public function __construct(CreateAction $createAction, DestroyAction $destroyAction)
+    public function register(RegisterRequest $request, RegisterAction $registerAction)
     {
-        $this->createAction = $createAction;
-        $this->destroyAction = $destroyAction;
+        $token = $registerAction($request);
+        return response()->json(['jwtToken' => $token], 200);
     }
 
-    public function create(CreateRequest $request)
+    public function login(LoginRequest $request, LoginAction $loginAction)
     {
-        return $this->createAction->execute($request);
+        $token = $loginAction($request);
+        return response()->json(['jwtToken' => $token], 200);
     }
 
-    public function destroy(DestroyRequest $request)
+    public function logout(LogoutRequest $request)
     {
-        return $this->destroyAction->execute($request);
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'ログアウトしました。'], 200);
     }
 }
 

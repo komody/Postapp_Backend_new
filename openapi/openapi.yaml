@@ -12,10 +12,10 @@ tags:
   - name: attachment
 servers:
   - url: 'http://localhost:1113'
-  - url: 'http://localhost:80'
+  - url: 'http://localhost:80/api'
 
 paths:
-  /api/session/register:
+  /session/register:
     post:
       tags:
         - session
@@ -23,7 +23,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Account'
+              $ref: '#/components/schemas/SessionRequest'
       responses:
         '200':
           description: successful operation
@@ -31,7 +31,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
-  /api/session:
+  /session:
     post:
       tags:
         - session
@@ -39,7 +39,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Account'
+              $ref: '#/components/schemas/SessionRequest'
       responses:
         '200':
           description: successful operation
@@ -53,13 +53,15 @@ paths:
       responses:
         '200':
           description: successful operation
-  /api/user:
-    post:
+  /users/me:
+    put:
       tags:
         - user
-      summary: Create user
-      operationId: createUser
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
       requestBody:
+        description: Update an existent user in the store
         content:
           application/json:
             schema:
@@ -71,7 +73,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-  /api/user/{userId}:
+  /users/{userId}:
     get:
       tags:
         - user
@@ -93,31 +95,6 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User not found
-    put:
-      tags:
-        - user
-      summary: Update user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        description: Update an existent user in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRequest'
-      responses:
-        default:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
     delete:
       tags:
         - user
@@ -135,7 +112,7 @@ paths:
           description: successful operation
         '404':
           description: User not found
-  /user/{userId}/follower:
+  /users/{userId}/follower:
     get:
       tags:
         - user
@@ -155,7 +132,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-  /user/{userId}/followee:
+  /users/{userId}/followee:
     get:
       tags:
         - user
@@ -175,7 +152,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-  /post:
+  /posts:
+    get:
+      tags:
+        - post
+      parameters:
+        - name: isFollowing
+          in: query
+          required: true
+          schema:
+            type: boolean
+      responses:
+        default:
+          description: 指定された条件に基づいたつぶやきのリストを返します
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostListResponse"
     post:
       tags:
         - post
@@ -193,7 +186,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Post'
-  /post/{postId}:
+  /posts/{postId}:
     get:
       tags:
         - post
@@ -242,11 +235,10 @@ paths:
                 $ref: '#/components/schemas/Post'
         '404':
           description: Post not found
-  /post/{postId}/like_count:
+  /posts/{postId}/replies:
     get:
       tags:
         - post
-      operationId: getLikeCount
       parameters:
         - name: postId
           in: path
@@ -254,15 +246,13 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
-          description: successful operation
+        default:
+          description: postIdのつぶやきに紐づくリプライ一覧を取得
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Post'
-  /user/{userId}/notifications:
+                $ref: "#/components/schemas/PostListResponse"
+  /users/{userId}/notifications:
     get:
       tags:
         - notification
@@ -320,7 +310,7 @@ paths:
                   $ref: '#/components/schemas/Notification'
         '404':
           description: User or notification not found
-  /attachment:
+  /attachments:
     post:
       tags:
         - attachment
@@ -349,7 +339,7 @@ paths:
                 $ref: '#/components/schemas/Attachment'
 components:
   schemas:
-    Account:
+    SessionRequest:
       type: object
       properties:
         email:
@@ -383,8 +373,8 @@ components:
           example: theUser
         introduction:
           type: string
-        iconAttachmentId:
-          type: integer
+        iconAttachment:
+          $ref: '#/components/schemas/Attachment'
         deletedAt:
           type: string
           example: '2018–10–26T21:32:52'
@@ -411,12 +401,33 @@ components:
           example: こんにちは
         like_count: 
           type: integer
-        user_id:
+        reply_count: 
           type: integer
-          format: int64
-          example: 10
-        attachment_id:
-          type: integer
+        user:
+          $ref: '#/components/schemas/User'
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+        created_at:
+          type: string
+          format: date-time
+          description: '投稿日時'
+          example: '2018–10–26T21:32:52'
+    PostListResponse:
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Post"
+    NotificationRequest:
+      type: object
+      properties:
+        alreadyRead:
+          type: boolean
+          description: '通知が既読かどうかを示すフラグ(true: 既読, false: 未読)'
+          example: false
     Notification:
       type: object
       properties:
@@ -444,13 +455,6 @@ components:
           format: date-time
           description: '通知が生成された日時'
           example: '2018–10–26T21:32:52'
-    NotificationRequest:
-      type: object
-      properties:
-        alreadyRead:
-          type: boolean
-          description: '通知が既読かどうかを示すフラグ(true: 既読, false: 未読)'
-          example: false
     Attachment:
       type: object
       properties:
