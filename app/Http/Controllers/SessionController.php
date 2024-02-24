@@ -26,9 +26,9 @@ class SessionController extends Controller
         return response()->json(['jwtToken' => $token], 200);
     }
 
-    public function logout(LogoutRequest $request)
+    public function logout(LogoutRequest $request, LogoutAction $logoutAction)
     {
-        $request->user()->currentAccessToken()->delete();
+        $token = $logoutAction($request);
         return response()->json(['message' => 'ログアウトしました。'], 200);
     }
 }
