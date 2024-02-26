@@ -28,7 +28,7 @@ class SessionController extends Controller
 
     public function logout(LogoutRequest $request, LogoutAction $logoutAction)
     {
-        $token = $logoutAction($request);
+        $logoutAction($request);
         return response()->json(['message' => 'ログアウトしました。'], 200);
     }
 }
