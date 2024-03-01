@@ -415,12 +415,9 @@ components:
           description: '投稿日時'
           example: '2018–10–26T21:32:52'
     PostListResponse:
-      type: object
-      properties:
-        posts:
-          type: array
-          items:
-            $ref: "#/components/schemas/Post"
+      type: array
+      items:
+        $ref: "#/components/schemas/Post"
     NotificationRequest:
       type: object
       properties:
