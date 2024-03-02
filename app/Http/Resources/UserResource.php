@@ -19,7 +19,15 @@ class UserResource extends JsonResource
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'introduction' => $this->resource->introduction,
-            'iconAttachmentId' => $this->resource->iconAttachmentId,
+            'iconAttachment' => [
+                [
+                    'id' => $this->resource->attachment_id,
+                    'type' => 'string',
+                    'url' => 'string',
+                    'preview_url' => 'string',
+                    'description' => 'string',
+                ]
+            ],
             'deletedAt' => $this->resource->deletedAt, 
         ];
     }

@@ -169,6 +169,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PostListResponse"
+      security:
+        - bearerAuth: []         # use the same name as above
     post:
       tags:
         - post
@@ -186,6 +188,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Post'
+      security:
+        - bearerAuth: []         # use the same name as above
   /posts/{postId}:
     get:
       tags:
@@ -338,6 +342,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Attachment'
 components:
+  securitySchemes:
+      bearerAuth:            # arbitrary name for the security scheme
+        type: http
+        scheme: bearer
+        bearerFormat: JWT    # optional, arbitrary value for documentation purposes
   schemas:
     SessionRequest:
       type: object
@@ -415,12 +424,9 @@ components:
           description: '投稿日時'
           example: '2018–10–26T21:32:52'
     PostListResponse:
-      type: object
-      properties:
-        posts:
-          type: array
-          items:
-            $ref: "#/components/schemas/Post"
+      type: array
+      items:
+        $ref: "#/components/schemas/Post"
     NotificationRequest:
       type: object
       properties:
