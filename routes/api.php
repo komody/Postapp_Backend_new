@@ -14,11 +14,15 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
-Route::get('/user/{userId}',[UserController::class, 'show']);
-// Route::get('/user/{userId}', 'App\Http\Controllers\UserController@show');
-Route::put('/user/{userId}',[UserController::class, 'update']);
-Route::delete('/user/{userId}',[UserController::class, 'destroy']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+
+    Route::get('/users/{userId}',[UserController::class, 'show']);
+    Route::put('/users/{userId}',[UserController::class, 'update']);
+    Route::delete('/users/{userId}',[UserController::class, 'destroy']);
+
+});
