@@ -32,16 +32,37 @@ class UserController extends Controller
 
     public function show(ShowRequest $request, $userId)
     {
-        return $this->showAction->execute($userId);
+        // return $this->showAction->execute($userId);
+
+        $result = $this->showAction->execute($userId);
+
+        return response()->json([
+            'data' => $result,
+            'message' => 'Success', // 成功メッセージ
+        ], 200); // HTTPステータスコード 200を返す
     }
 
     public function update(UpdateRequest $request, $userId)
     {
-        return $this->updateAction->execute($userId);
+        // return $this->updateAction->execute($userId);
+
+        $result = $this->updateAction->execute($userId);
+
+        return response()->json([
+            'data' => $result,
+            'message' => 'Success', // 成功メッセージ
+        ], 200); // HTTPステータスコード 200を返す
     }
 
     public function destroy(DestroyRequest $request, $userId)
     {
-        return $this->destroyAction->execute($userId);
+        // return $this->destroyAction->execute($userId);
+
+        $result = $this->destroyAction->execute($userId);
+
+        return response()->json([
+            'data' => $result,
+            'message' => 'Success', // 成功メッセージ
+        ], 200); // HTTPステータスコード 200を返す
     }
 }
