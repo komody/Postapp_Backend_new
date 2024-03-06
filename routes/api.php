@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SessionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +14,7 @@ use App\Http\Controllers\UserController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -26,3 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/users/{userId}',[UserController::class, 'destroy']);
 
 });
+
+Route::post('/session/register', [SessionController::class, 'register']); // ユーザー登録
+Route::post('/session', [SessionController::class, 'login']); // ログイン
+Route::delete('/session', [SessionController::class, 'logout']); // ログアウト
+
+
