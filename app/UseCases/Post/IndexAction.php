@@ -15,7 +15,6 @@ class IndexAction
 
         $followingUserId = auth()->user()->following->pluck('id');
         $postList = Post::whereIn('user_id', $followingUserId)
-        ->orWhere('user_id', $userId)
         ->orderByDesc('created_at') // 投稿順（created_atカラムの降順）
         ->get();
 
