@@ -15,14 +15,22 @@ use App\Http\Controllers\SessionController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+
+    Route::get('/users/{userId}',[UserController::class, 'show']);
+    Route::put('/users/me',[UserController::class, 'update']);
+    Route::delete('/users/{userId}',[UserController::class, 'destroy']);
+
 });
 
 Route::post('/session/register', [SessionController::class, 'register']); // ユーザー登録
 Route::post('/session', [SessionController::class, 'login']); // ログイン
 Route::delete('/session', [SessionController::class, 'logout']); // ログアウト
 
-Route::get('/user/{userId}',[UserController::class, 'show']);
-// Route::get('/user/{userId}', 'App\Http\Controllers\UserController@show');
-Route::put('/user/{userId}',[UserController::class, 'user']);
+
