@@ -73,6 +73,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+      security:
+        - bearerAuth: []         # use the same name as above
   /users/{userId}:
     get:
       tags:
@@ -95,6 +97,9 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User not found
+      security:
+        - bearerAuth: []         # use the same name as above
+
     delete:
       tags:
         - user
@@ -112,6 +117,9 @@ paths:
           description: successful operation
         '404':
           description: User not found
+      security:
+        - bearerAuth: []         # use the same name as above
+
   /users/{userId}/follower:
     get:
       tags:

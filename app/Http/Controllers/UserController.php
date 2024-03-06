@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\UseCases\User\ShowAction;
+use App\UseCases\User\UpdateAction;
+use App\Http\Resources\UserResource;
+use App\UseCases\User\DestroyAction;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\User\ShowRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Http\Requests\User\DestroyRequest;
-use App\Http\Resources\UserResource;
-use App\UseCases\User\ShowAction;
-use App\UseCases\User\UpdateAction;
-use App\UseCases\User\DestroyAction;
 
 
 class UserController extends Controller
@@ -30,9 +31,9 @@ class UserController extends Controller
     public function update(UpdateRequest $request, UpdateAction $updateAction)
     {
         // return $this->updateAction->execute($userId);
-        $userId = 1;//todo認証ユーザーのIDを渡す
+        $userId = Auth::id();
 
-        $result = $updateAction($userId, $request->name, $request->introduction, $request->icon_attachment_id);
+        $result = $updateAction($userId, $request->name, $request->introduction, $request->iconAttachmentId);
 
         return new UserResource($result);
     }
