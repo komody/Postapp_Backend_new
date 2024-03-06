@@ -73,6 +73,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+      security:
+        - bearerAuth: []         # use the same name as above
   /users/{userId}:
     get:
       tags:
@@ -95,6 +97,9 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User not found
+      security:
+        - bearerAuth: []         # use the same name as above
+
     delete:
       tags:
         - user
@@ -112,6 +117,9 @@ paths:
           description: successful operation
         '404':
           description: User not found
+      security:
+        - bearerAuth: []         # use the same name as above
+
   /users/{userId}/follower:
     get:
       tags:
@@ -169,6 +177,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PostListResponse"
+      security:
+        - bearerAuth: []         # use the same name as above
     post:
       tags:
         - post
@@ -186,6 +196,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Post'
+      security:
+        - bearerAuth: []         # use the same name as above
   /posts/{postId}:
     get:
       tags:
@@ -338,6 +350,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Attachment'
 components:
+  securitySchemes:
+      bearerAuth:            # arbitrary name for the security scheme
+        type: http
+        scheme: bearer
+        bearerFormat: JWT    # optional, arbitrary value for documentation purposes
   schemas:
     SessionRequest:
       type: object
