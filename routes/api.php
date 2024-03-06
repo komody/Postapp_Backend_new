@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('/users/{userId}',[UserController::class, 'show']);
-    Route::put('/users/{userId}',[UserController::class, 'update']);
+    Route::put('/users/me',[UserController::class, 'update']);
     Route::delete('/users/{userId}',[UserController::class, 'destroy']);
 
 });

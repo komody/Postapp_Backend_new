@@ -7,12 +7,12 @@ use App\Http\Resources\UserResource;
 
 class DestroyAction
 {
-    public function execute($userId)
+    public function __invoke($userId)
     {
         $user = User::destroy($userId);
 
         try {
-            return new UserResource($user);
+            return $user;
         } catch (\Throwable $e) {
             // 全てのエラー・例外をキャッチしてログに残す
             \Log::error($e);

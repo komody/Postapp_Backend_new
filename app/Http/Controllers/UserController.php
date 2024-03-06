@@ -16,53 +16,33 @@ use App\UseCases\User\DestroyAction;
 class UserController extends Controller
 {
     //
-    protected $storeAction;
-    protected $updateAction;
-    protected $destroyAction;
 
-    public function __construct(
-        ShowAction $showAction, 
-        UpdateAction $updateAction,
-        DestroyAction $destroyAction)
-    {
-        $this->showAction = $showAction;
-        $this->updateAction = $updateAction;
-        $this->destroyAction = $destroyAction;
-    }
-
-    public function show(ShowRequest $request, $userId)
+    public function show(ShowRequest $request, ShowAction $showAction, $userId)
     {
         // return $this->showAction->execute($userId);
 
-        $result = $this->showAction->execute($userId);
+        $result = $showAction($userId);
 
-        return response()->json([
-            'data' => $result,
-            'message' => 'Success', // 成功メッセージ
-        ], 200); // HTTPステータスコード 200を返す
+        return new UserResource($result);
+
     }
 
-    public function update(UpdateRequest $request, $userId)
+    public function update(UpdateRequest $request, UpdateAction $updateAction)
     {
         // return $this->updateAction->execute($userId);
+        $userId = 1;//todo認証ユーザーのIDを渡す
 
-        $result = $this->updateAction->execute($userId);
+        $result = $updateAction($userId, $request->name, $request->introduction, $request->icon_attachment_id);
 
-        return response()->json([
-            'data' => $result,
-            'message' => 'Success', // 成功メッセージ
-        ], 200); // HTTPステータスコード 200を返す
+        return new UserResource($result);
     }
 
-    public function destroy(DestroyRequest $request, $userId)
+    public function destroy(DestroyRequest $request, DestroyAction $destroyAction, $userId)
     {
         // return $this->destroyAction->execute($userId);
 
-        $result = $this->destroyAction->execute($userId);
+        $result = $destroyAction($userId);
 
-        return response()->json([
-            'data' => $result,
-            'message' => 'Success', // 成功メッセージ
-        ], 200); // HTTPステータスコード 200を返す
+        return new UserResource($result);
     }
 }

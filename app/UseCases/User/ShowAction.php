@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ShowAction
 {
-    public function execute($userId)
+    public function __invoke($userId)
     {
         $user = User::findOrFail($userId);
 
         try {
-            return new UserResource($user);
+            return $user;
         
         } catch (ModelNotFoundException $e) {
             // データが見つからなかっただけならロギング不要

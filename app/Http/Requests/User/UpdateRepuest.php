@@ -25,8 +25,6 @@ class UpdateRequest extends FormRequest
     {
         return [
               'name' => ['nullable', 'string', 'min:4', 'max:16'],
-              'email' => ['nullable', 'email'],
-              'password' => ['nullable', 'string', 'min:8'],
               'introduction' => ['nullable', 'string', 'max:160'],
               'icon_attachment_id' => ['nullable', 'integer'],
         ];
@@ -35,10 +33,8 @@ class UpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.min' => 'ユーザー名は4文字以上で入力してください',
-            'title.max' => 'ユーザー名は16文字以内で入力してください',
-            'password.email' => '有効なメールアドレスを入力してください',
-            'password.min' => 'ユーザー名は8文字以上で入力してください',
+            'name.min' => 'ユーザー名は4文字以上で入力してください',
+            'name.max' => 'ユーザー名は16文字以内で入力してください',
             'introduction.max' => '自己紹介は160文字以内で入力してください',
         ];
     }

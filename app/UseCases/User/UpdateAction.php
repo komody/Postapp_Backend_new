@@ -9,12 +9,17 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UpdateAction
 {
-    public function execute($userId)
+    public function __invoke(int $userId, string $name, string $introduction, int $icon_attachment_id)
     {
-        $user = User::update($userId);
+        $user = User::find($userId);
+        $user->update([
+            'name'=>$name, 
+            'introduction'=>$introduction, 
+            'icon_attachment_id'=>$icon_attachment_id
+        ]);
 
         try {
-            return new UserResource($user);
+            return $user;
 
         } catch (ModelNotFoundException $e) {
             // データが見つからなかっただけならロギング不要
