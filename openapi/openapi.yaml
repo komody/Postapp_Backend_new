@@ -160,6 +160,44 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+  /users/{userId}/follow:
+    post:
+      tags:
+        - user
+      operationId: FollowUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      security:
+        - bearerAuth: []         # use the same name as above
+  /users/{userId}/unfollow:
+    post:
+      tags:
+        - user
+      operationId: UnfollowUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []         # use the same name as above
   /posts:
     get:
       tags:
@@ -392,6 +430,10 @@ components:
           type: string
         iconAttachment:
           $ref: '#/components/schemas/Attachment'
+        follow_count:
+          type: integer
+        follower_count: 
+          type: integer
         deletedAt:
           type: string
           example: '2018–10–26T21:32:52'
