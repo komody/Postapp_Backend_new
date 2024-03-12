@@ -13,8 +13,9 @@ class PostController extends Controller
 {
     public function index(IndexRequest $request, IndexAction $indexAction)
     {
-        $post = $indexAction($request);
-        return new PostResource($post);
+        $isFollowing = $request->query('isFollowing') === 'true';
+        $posts = $indexAction($request, $isFollowing);
+        return PostResource::collection($posts);
     }
 
     public function create(CreateRequest $request, CreateAction $createAction)

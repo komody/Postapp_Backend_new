@@ -24,5 +24,9 @@ class Follow extends Model
     {
         return $this->belongsTo(User::class, 'followed_user_id');
     }
-
 }
+
+// めも
+// 「User.php」と「Follow.php」と「Post.php」の関係について
+// 「User.php」と「Post.php」の関係は1対多の関係
+// 「User.php」と「Follow.php」の関係が多対多の関係
