@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('post_attachments', function (Blueprint $table) {
             $table->id();
-            // $table->primary(['post_id', 'attachment_id']);
-            // $table->foreign('post_id')->references('id')->on('posts');
-            $table->foreignId('post_id')->nullable()->constrained();
-            // $table->foreign('attachment_id')->references('id')->on('attachments');
-            $table->foreignId('attachment_id')->nullable()->constrained();
+            $table->foreignId('post_id')->nullable()->constrained()
+            ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('attachment_id')->nullable()->constrained()
+            ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

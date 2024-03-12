@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('content');
-            $table->integer('like_count');
-            // $table->foreign('user_id')->references('id')->on('users');
-            $table->foreignId('user_id')->nullable()->constrained();
-            // $table->foreign('attachment_id')->references('id')->on('attachments');
-            $table->foreignId('attachment_id')->nullable()->constrained();
+            $table->integer('like_count')->default(0)->change();
+            $table->foreignId('user_id')->nullable()->constrained()
+            ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('attachment_id')->nullable()->constrained()
+            ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

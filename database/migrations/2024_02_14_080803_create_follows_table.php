@@ -14,11 +14,10 @@ return new class extends Migration
         // Schema::dropIfExists('follows');
         Schema::create('follows', function (Blueprint $table) {
             $table->id();
-            // $table->primary(['following_user_id', 'followed_user_id']);
-            // $table->foreign('following_user_id')->references('id')->on('users');
-            $table->foreignId('following_user_id')->nullable()->constrained('users');
-            // $table->foreign('followed_user_id')->references('id')->on('users');
-            $table->foreignId('followed_user_id')->nullable()->constrained('users');
+            $table->foreignId('following_user_id')->nullable()->constrained('users')
+            ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('followed_user_id')->nullable()->constrained('users')
+            ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }
