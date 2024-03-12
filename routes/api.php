@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/users/{userId}',[UserController::class, 'destroy']);
     Route::get('/posts', [PostController::class, 'index']); // つぶやき投稿一覧
     Route::post('/posts', [PostController::class, 'create']); // つぶやき投稿
+    Route::post('/attachments', [AttachmentController::class, 'create']); // 画像投稿
 });
 
 // ここはsanctumのミドルウェアグループから外さないと認証エラーになる
