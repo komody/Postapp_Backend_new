@@ -16,19 +16,21 @@ class UserResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
-            'id' => $this->resource->id,
-            'name' => $this->resource->name,
-            'introduction' => $this->resource->introduction,
-            'iconAttachment' => [
-                [
+            [
+                'id' => $this->resource->id,
+                'name' => $this->resource->name,
+                'introduction' => $this->resource->introduction,
+                'iconAttachment' => [
                     'id' => $this->resource->attachment_id,
                     'type' => 'string',
                     'url' => 'string',
                     'preview_url' => 'string',
                     'description' => 'string',
-                ]
-            ],
-            'deletedAt' => $this->resource->deletedAt, 
+                ],
+                'follow_count' => $this->resource->follow_count,
+                'follower_count' => $this->resource->follower_count,
+                'deletedAt' => $this->resource->deletedAt, 
+            ]
         ];
     }
 }

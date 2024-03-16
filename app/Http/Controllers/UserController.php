@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\UseCases\User\ShowAction;
+use App\UseCases\User\FollowAction;
+use App\UseCases\User\UnFollowAction;
 use App\UseCases\User\UpdateAction;
 use App\Http\Resources\UserResource;
 use App\UseCases\User\DestroyAction;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\User\ShowRequest;
+use App\Http\Requests\User\FollowRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Http\Requests\User\DestroyRequest;
+use App\Http\Requests\User\UnfollowRequest;
 
 
 class UserController extends Controller
@@ -44,6 +48,18 @@ class UserController extends Controller
 
         $result = $destroyAction($userId);
 
+        return new UserResource($result);
+    }
+
+    public function follow(FollowRequest $request, FollowAction $followAction, $userId)
+    {
+        $result = $followAction($request, $userId);
+        return new UserResource($result);
+    }
+
+    public function unfollow(UnfollowRequest $request, UnfollowAction $unfollowAction, $userId)
+    {
+        $result = $unfollowAction($request, $userId);
         return new UserResource($result);
     }
 }
