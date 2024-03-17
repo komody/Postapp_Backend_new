@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->integer('type')->comment('1: 返信, 2: いいね, 3: フォロー');
-            // $table->foreign('user_id')->references('id')->on('users');
-            $table->foreignId('user_id')->nullable()->constrained();
-            // $table->foreign('notified_by')->references('id')->on('users');
-            $table->foreignId('notified_by')->nullable()->constrained('users');
+            $table->foreignId('user_id')->nullable()->constrained()
+            ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('notified_by')->nullable()->constrained('users')
+            ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

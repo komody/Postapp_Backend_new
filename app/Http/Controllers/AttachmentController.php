@@ -12,7 +12,7 @@ class AttachmentController extends Controller
     //
     public function create(CreateRequest $request, CreateAction $createAction)
     {
-        $result = $createAction($request->description);
+        $result = $createAction($request);
 
         return new AttachmentResource($result);
     }

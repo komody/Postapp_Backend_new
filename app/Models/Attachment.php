@@ -10,6 +10,9 @@ class Attachment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'type',
+        'url',
+        'preview_url',
         'description'
     ];
 }
