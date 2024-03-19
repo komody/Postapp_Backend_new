@@ -21,12 +21,8 @@ class CreateRequest extends FormRequest
      */
     public function rules(): array
     {
-        // dd(123);
         return [
             //
-            'type' => ['required', 'string'],
-            // 'url' => ['required', 'string'],
-            // 'preview_url' => ['required', 'string'],
             'description' => ['required', 'string', 'max:160'],
         ];
     }
