@@ -23,14 +23,13 @@ class CreateRequest extends FormRequest
     {
         return [
             //
-            'description' => ['required', 'string', 'max:160'],
+            'file' => ['required'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'description.max' => '画像の説明は160文字以内で入力してください',
         ];
     }
 }

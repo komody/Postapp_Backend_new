@@ -372,14 +372,12 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              required: 
+                - file
               properties:
-                type:
-                  type: string
-                url:
+                file:
                   type: string
                   format: binary
-                description:
-                  type: string
       responses:
         '200':
           description: successful operation

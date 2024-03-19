@@ -16,7 +16,8 @@ class CreateAction
     {
         $userId = Auth::id();
            
-        $file = $request->file('url');
+        $file = $request->file('file');
+        $description = $file->getClientOriginalName();
         $type = $file->extension();
         $path = $file->storePublicly('public/upload');    
         $url = Storage::url($path);
@@ -24,17 +25,15 @@ class CreateAction
         $attachment = new Attachment([
             'type' => $type,
             'url' => $url,
-            'preview_url' => 'preview_url',
-            'description' => $request->input('description'),
+            'preview_url' => $url,
+            'description' => $description,
         ]);
-
-        $attachment->save();
-
+    
         try {
+            $attachment->save();
             return $attachment;
         
         } catch (\Throwable $e) {
-            \DB::rollback();
             // それ以外のエラーは想定外なのでログに残す
             \Log::error($e);
             
