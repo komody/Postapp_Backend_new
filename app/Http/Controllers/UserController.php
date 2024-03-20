@@ -53,12 +53,14 @@ class UserController extends Controller
 
     public function follow(FollowRequest $request, FollowAction $followAction, $userId)
     {
+        $this->authorize('follow', [User::class, $userId]);
         $result = $followAction($request, $userId);
         return new UserResource($result);
     }
 
     public function unfollow(UnfollowRequest $request, UnfollowAction $unfollowAction, $userId)
     {
+        $this->authorize('unfollow', [User::class, $userId]);
         $result = $unfollowAction($request, $userId);
         return new UserResource($result);
     }

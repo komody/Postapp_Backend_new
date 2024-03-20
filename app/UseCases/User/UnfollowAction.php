@@ -13,28 +13,24 @@ class UnfollowAction
     public function __invoke(Request $request, $userId)
     {
         $followUserId = Auth::id();
-        // 自分自身をフォローしようとしていないかをチェック
-        if ($followUserId !== (int)$userId) {
-            // フォローを作成
-            $follow = Follow::where([
-                'following_user_id' => $followUserId,
-                'followed_user_id' => $userId,
-            ])->delete();
-        
-            // フォロー数を取得
-            $followCount = Follow::where('following_user_id', $userId)->count();
 
-            // フォロワー数を取得
-            $followerCount = Follow::where('followed_user_id', $userId)->count();
+        // フォローを解除
+        $follow = Follow::where([
+            'following_user_id' => $followUserId,
+            'followed_user_id' => $userId,
+        ])->delete();
 
-            // フォローを作成したユーザーを取得
-            $followedUser = User::find($userId);
-            // フォロー数とフォロワー数をユーザーモデルにセット
-            $followedUser->follow_count = $followCount;
-            $followedUser->follower_count = $followerCount;
+        // フォローを作成したユーザーを取得
+        $result = User::find($userId);
 
-            // UserResourceに渡すデータに id、フォロー数、フォロワー数を含める
-            return new UserResource($followedUser);
-        }
+        // フォロー数とフォロワー数を取得し、成功したかどうかを判定
+        $followCount = $result->followCount($userId);
+        $followerCount = $result->followerCount($userId);
+
+        // フォロー数とフォロワー数をユーザーモデルにセット
+        $result->follow_count = $followCount;
+        $result->follower_count = $followerCount;
+
+        return $result;
     }
 }
