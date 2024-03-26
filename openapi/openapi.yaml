@@ -166,7 +166,7 @@ paths:
         - user
       operationId: FollowUser
       parameters:
-        - name: userId
+        - name: userId           # フォローする相手のuserId（followed_user_id）
           in: path
           required: true
           schema:
@@ -188,7 +188,7 @@ paths:
         - user
       operationId: UnfollowUser
       parameters:
-        - name: userId
+        - name: userId           # フォローする相手のuserId（followed_user_id）
           in: path
           required: true
           schema:
@@ -196,6 +196,12 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
       security:
         - bearerAuth: []         # use the same name as above
   /posts:
@@ -430,9 +436,9 @@ components:
           type: string
         iconAttachment:
           $ref: '#/components/schemas/Attachment'
-        follow_count:
+        follow_count:           # フォロー数（following_user_id）
           type: integer
-        follower_count: 
+        follower_count:           # フォロワー数（followed_user_id）
           type: integer
         deletedAt:
           type: string

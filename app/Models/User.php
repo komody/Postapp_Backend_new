@@ -59,6 +59,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(Follow::class, 'followed_user_id');
     }
+
+    // フォロー数を取得
+    public function followCount($userId)
+    {
+        return Follow::where('following_user_id', $userId)->count();
+    }
+
+    // フォロワー数を取得
+    public function followerCount($userId)
+    {
+        return Follow::where('followed_user_id', $userId)->count();
+    }
 }
 
 // めも

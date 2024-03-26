@@ -11,11 +11,19 @@ class ShowAction
 {
     public function __invoke($userId)
     {
-        $user = User::findOrFail($userId);
-
         try {
+            $user = User::findOrFail($userId);
+
+            // フォロー数とフォロワー数を取得
+            $followCount = $user->followCount($userId);
+            $followerCount = $user->followerCount($userId);
+
+            // フォロー数とフォロワー数をユーザーモデルにセット
+            $user->follow_count = $followCount;
+            $user->follower_count = $followerCount;
+
             return $user;
-        
+
         } catch (ModelNotFoundException $e) {
             // データが見つからなかっただけならロギング不要
             throw $e;
