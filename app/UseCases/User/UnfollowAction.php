@@ -12,18 +12,21 @@ class UnfollowAction
 {
     public function __invoke(Request $request, $userId)
     {
-        $followUserId = Auth::id();
+        $unfollowUserId = Auth::id();
 
-        // フォローを解除
-        $follow = Follow::where([
-            'following_user_id' => $followUserId,
+        // フォローを解除し、成功したかどうかをチェック
+        $unfollow = Follow::where([
+            'following_user_id' => $unfollowUserId,
             'followed_user_id' => $userId,
         ])->delete();
+        if (!$unfollow) {
+            throw new \Exception('エラーが発生しました。しばらくしてからやり直してください。');
+        }
 
-        // フォローを作成したユーザーを取得
+        // フォローを作成したUserを取得
         $result = User::find($userId);
 
-        // フォロー数とフォロワー数を取得し、成功したかどうかを判定
+        // フォロー数とフォロワー数を取得
         $followCount = $result->followCount($userId);
         $followerCount = $result->followerCount($userId);
 
