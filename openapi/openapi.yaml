@@ -291,6 +291,8 @@ paths:
                 $ref: '#/components/schemas/Post'
         '404':
           description: Post not found
+      security:
+          - bearerAuth: []         # use the same name as above
   /posts/{postId}/replies:
     get:
       tags:

@@ -27,6 +27,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/posts', [PostController::class, 'index']); // つぶやき投稿一覧
     Route::post('/posts', [PostController::class, 'create']); // つぶやき投稿
 
+    Route::put('/posts/{postId}', [PostController::class, 'update']); // つぶやき更新
+
     Route::post('/users/{userId}/follow', [UserController::class, 'follow']); // フォロー
     Route::post('/users/{userId}/unfollow', [UserController::class, 'unfollow']); // フォロー解除
 });
